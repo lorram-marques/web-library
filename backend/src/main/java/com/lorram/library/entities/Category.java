@@ -1,9 +1,9 @@
 package com.lorram.library.entities;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,27 +12,25 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_book")
-public class Book implements Serializable {
+@Table(name = "tb_category")
+public class Category implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String title;
-	private String author;
+	private String name;
 	
 	//TODO @ManyToMany
-	private Set<Category> categories = new HashSet<>();
-	
-	public Book() {
+	private List<Book> books = new ArrayList<>();
+
+	public Category() {
 	}
 
-	public Book(Long id, String title, String author, Set<Category> categories) {
+	public Category(Long id, String name, List<Book> books) {
 		this.id = id;
-		this.title = title;
-		this.author = author;
-		this.categories = categories;
+		this.name = name;
+		this.books = books;
 	}
 
 	public Long getId() {
@@ -43,24 +41,20 @@ public class Book implements Serializable {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return name;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getAuthor() {
-		return author;
+	public List<Book> getBooks() {
+		return books;
 	}
 
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-
-	public Set<Category> getCategories() {
-		return categories;
+	public void setBooks(List<Book> books) {
+		this.books = books;
 	}
 
 	@Override
@@ -76,7 +70,7 @@ public class Book implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Book other = (Book) obj;
+		Category other = (Category) obj;
 		return Objects.equals(id, other.id);
 	}
 }

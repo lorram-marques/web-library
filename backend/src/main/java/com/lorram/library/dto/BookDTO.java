@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.lorram.library.entities.Book;
+import com.lorram.library.entities.Category;
 
 public class BookDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -13,12 +14,12 @@ public class BookDTO implements Serializable {
 	private String title;
 	private String author;
 	
-	private Set<?> categories = new HashSet<>();
+	private Set<Category> categories = new HashSet<>();
 
 	public BookDTO() {
 	}
 
-	public BookDTO(Long id, String title, String author, Set<?> categories) {
+	public BookDTO(Long id, String title, String author, Set<Category> categories) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -61,7 +62,7 @@ public class BookDTO implements Serializable {
 		return categories;
 	}
 
-	public void setCategories(Set<?> categories) {
+	public void setCategories(Set<Category> categories) {
 		this.categories = categories;
 	}
 }

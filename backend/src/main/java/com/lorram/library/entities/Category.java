@@ -1,14 +1,15 @@
 package com.lorram.library.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,13 +22,13 @@ public class Category implements Serializable {
 	private Long id;
 	private String name;
 	
-	//TODO @ManyToMany
-	private List<Book> books = new ArrayList<>();
+	@ManyToMany(mappedBy = "categories")
+	private Set<Book> books = new HashSet<>();
 
 	public Category() {
 	}
 
-	public Category(Long id, String name, List<Book> books) {
+	public Category(Long id, String name, Set<Book> books) {
 		this.id = id;
 		this.name = name;
 		this.books = books;
@@ -49,11 +50,11 @@ public class Category implements Serializable {
 		this.name = name;
 	}
 
-	public List<Book> getBooks() {
+	public Set<Book> getBooks() {
 		return books;
 	}
 
-	public void setBooks(List<Book> books) {
+	public void setBooks(Set<Book> books) {
 		this.books = books;
 	}
 

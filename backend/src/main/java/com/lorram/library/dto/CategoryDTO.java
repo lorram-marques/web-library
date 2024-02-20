@@ -1,8 +1,8 @@
 package com.lorram.library.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.lorram.library.entities.Book;
 import com.lorram.library.entities.Category;
@@ -13,7 +13,7 @@ public class CategoryDTO implements Serializable {
 	private Long id;
 	private String name;
 	
-	private List<Book> books = new ArrayList<>();
+	private Set<Book> books = new HashSet<>();
 	
 	public CategoryDTO() {
 	}
@@ -45,11 +45,11 @@ public class CategoryDTO implements Serializable {
 		this.name = name;
 	}
 
-	public List<Book> getBooks() {
+	public Set<Book> getBooks() {
 		return books;
 	}
 
-	public void setBooks(List<Book> books) {
+	public void setBooks(Set<Book> books) {
 		this.books = books;
 	}
 }

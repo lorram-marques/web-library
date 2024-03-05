@@ -8,8 +8,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.lorram.library.dto.BookDTO;
+import com.lorram.library.dto.CategoryDTO;
 import com.lorram.library.entities.Book;
+import com.lorram.library.entities.Category;
 import com.lorram.library.repositories.BookRepository;
+import com.lorram.library.repositories.CategoryRepository;
 import com.lorram.library.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -17,6 +20,9 @@ public class BookService {
 
 	@Autowired
 	private BookRepository repository;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
 	
 	public Page<BookDTO> findAll(Pageable pageable) {
 		Page<Book> list = repository.findAll(pageable);
@@ -50,5 +56,11 @@ public class BookService {
 	private void fromDto(BookDTO dto, Book entity) {
 		entity.setAuthor(dto.getAuthor());
 		entity.setTitle(dto.getAuthor());
+		
+		entity.getCategories().clear();
+		for (CategoryDTO categoryDto : dto.getCategories()) {
+			Category category = categoryRepository.getReferenceById(categoryDto.getId());
+			entity.getCategories().add(category);			
+		}
 	}
 }

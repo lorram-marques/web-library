@@ -3,9 +3,9 @@ package com.lorram.library.dto;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.lorram.library.entities.Book;
-import com.lorram.library.entities.Category;
 
 public class BookDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -14,12 +14,12 @@ public class BookDTO implements Serializable {
 	private String title;
 	private String author;
 	
-	private Set<Category> categories = new HashSet<>();
+	private Set<CategoryDTO> categories = new HashSet<>();
 
 	public BookDTO() {
 	}
 
-	public BookDTO(Long id, String title, String author, Set<Category> categories) {
+	public BookDTO(Long id, String title, String author, Set<CategoryDTO> categories) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -31,7 +31,7 @@ public class BookDTO implements Serializable {
 		id = book.getId();
 		title = book.getTitle();
 		author = book.getAuthor();
-		categories = book.getCategories();
+		categories = book.getCategories().stream().map(x -> new CategoryDTO(x)).collect(Collectors.toSet());
 	}
 
 	public Long getId() {
@@ -58,11 +58,11 @@ public class BookDTO implements Serializable {
 		this.author = author;
 	}
 
-	public Set<?> getCategories() {
+	public Set<CategoryDTO> getCategories() {
 		return categories;
 	}
 
-	public void setCategories(Set<Category> categories) {
+	public void setCategories(Set<CategoryDTO> categories) {
 		this.categories = categories;
 	}
 }

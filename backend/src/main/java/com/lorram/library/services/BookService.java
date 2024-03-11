@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +16,10 @@ import com.lorram.library.entities.Book;
 import com.lorram.library.entities.Category;
 import com.lorram.library.repositories.BookRepository;
 import com.lorram.library.repositories.CategoryRepository;
+import com.lorram.library.services.exceptions.DatabaseException;
 import com.lorram.library.services.exceptions.ResourceNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class BookService {
@@ -31,9 +35,13 @@ public class BookService {
 			Page<Book> list = repository.findAll(pageRequest);
 			return list.map(x -> new BookDTO(x));
 		} else {
-			List<Book> list = categoryRepository.getReferenceById(categoryId).getBooks();
-			Page<Book> page = new PageImpl<>(list, pageRequest, list.size());
-			return page.map(x -> new BookDTO(x));
+			try {
+				List<Book> list = categoryRepository.getReferenceById(categoryId).getBooks();
+				Page<Book> page = new PageImpl<>(list, pageRequest, list.size());
+				return page.map(x -> new BookDTO(x));
+			} catch(EntityNotFoundException e) {
+				throw new ResourceNotFoundException(categoryId);
+			}	
 		}
 	}
 	
@@ -52,8 +60,12 @@ public class BookService {
 	
 	public BookDTO insert(BookDTO dto) {
 		Book entity = new Book();
-		fromDto(dto, entity);
-		entity = repository.save(entity);
+		try {
+			fromDto(dto, entity);
+			entity = repository.save(entity);
+			} catch(DataIntegrityViolationException e) {
+				throw new DatabaseException("Integrity violation");
+			}	
 		return new BookDTO(entity);
 	}
 	

@@ -3,6 +3,7 @@ package com.lorram.library.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.lorram.library.dto.CategoryDTO;
 import com.lorram.library.entities.Category;
 import com.lorram.library.repositories.CategoryRepository;
+import com.lorram.library.services.exceptions.DatabaseException;
 import com.lorram.library.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -38,8 +40,12 @@ public class CategoryService {
 	
 	public CategoryDTO insert(CategoryDTO dto) {
 		Category entity = new Category();
-		fromDto(dto, entity);
-		entity = repository.save(entity);
+		try {
+			fromDto(dto, entity);
+			entity = repository.save(entity);
+			} catch(DataIntegrityViolationException e) {
+				throw new DatabaseException("Integrity violation");
+			}
 		return new CategoryDTO(entity);
 	}
 	

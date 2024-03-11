@@ -1,10 +1,12 @@
 package com.lorram.library.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.lorram.library.dto.BookDTO;
@@ -24,9 +26,15 @@ public class BookService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
-	public Page<BookDTO> findAll(Pageable pageable) {
-		Page<Book> list = repository.findAll(pageable);
-		return list.map(x -> new BookDTO(x));
+	public Page<BookDTO> findAll(Long categoryId, PageRequest pageRequest) {
+		if(categoryId == 0) {
+			Page<Book> list = repository.findAll(pageRequest);
+			return list.map(x -> new BookDTO(x));
+		} else {
+			List<Book> list = categoryRepository.getReferenceById(categoryId).getBooks();
+			Page<Book> page = new PageImpl<>(list, pageRequest, list.size());
+			return page.map(x -> new BookDTO(x));
+		}
 	}
 	
 	public BookDTO findById(Long id) {

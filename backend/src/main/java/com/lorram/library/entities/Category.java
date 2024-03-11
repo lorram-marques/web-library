@@ -1,9 +1,9 @@
 package com.lorram.library.entities;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -26,12 +26,12 @@ public class Category implements Serializable {
 	
 	@JsonIgnore
 	@ManyToMany(mappedBy = "categories")
-	private Set<Book> books = new HashSet<>();
+	private List<Book> books = new ArrayList<>();
 
 	public Category() {
 	}
 
-	public Category(Long id, String name, Set<Book> books) {
+	public Category(Long id, String name, List<Book> books) {
 		this.id = id;
 		this.name = name;
 		this.books = books;
@@ -53,11 +53,11 @@ public class Category implements Serializable {
 		this.name = name;
 	}
 
-	public Set<Book> getBooks() {
+	public List<Book> getBooks() {
 		return books;
 	}
 
-	public void setBooks(Set<Book> books) {
+	public void setBooks(List<Book> books) {
 		this.books = books;
 	}
 

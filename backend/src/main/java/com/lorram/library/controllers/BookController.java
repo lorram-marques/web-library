@@ -30,14 +30,14 @@ public class BookController {
 	
 	@GetMapping
 	public ResponseEntity<Page<BookDTO>> findAll(
-			// TODO filter by category
+			@RequestParam(value = "categoryId", defaultValue = "0") Long categoryId,
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "12") Integer linesPerPage,
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction,
 			@RequestParam(value = "orderBy", defaultValue = "title") String orderBy	
 			) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-		Page<BookDTO> list = service.findAll(pageRequest);
+		Page<BookDTO> list = service.findAll(categoryId, pageRequest);
 		return ResponseEntity.ok().body(list);
 	}
 	
